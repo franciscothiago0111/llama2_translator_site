@@ -36,8 +36,14 @@ let startTime = 0;
 let elapsedTime = 0;
 let timerInterval = null;
 
-
-
+function prepareTextForSpeech(text) {
+  return text
+    .replace(/\n/g, ' ')        // Remove quebras de linha
+    .replace(/[^\x20-\x7E]/g, '') // remove caracteres estranhos
+    .replace(/\. /g, ', ')      // Substitui ponto final por vírgula e espaço
+    .replace(/\s+/g, ' ')       // Remove espaços duplicados
+    .trim();                    // Remove espaços nas extremidades
+}
 
 // Obter a posição aproximada da palavra atual
 function getCurrentWordPosition() {
@@ -125,7 +131,8 @@ function speakText(text, startPosition = 0) {
   }
 
   // Criar nova instância de fala
-  currentUtterance = new SpeechSynthesisUtterance(text);
+  const cleanedText  = prepareTextForSpeech(text);
+  currentUtterance = new SpeechSynthesisUtterance(cleanedText);
   currentUtterance.lang = 'en-US';
   currentUtterance.rate = parseFloat(1);
   
@@ -233,12 +240,10 @@ progressBar.addEventListener('click', (e) => {
 
 // Text-to-Speech para modal words (simplificado)
 function speakWordOnly(text) {
-  const utterance = new SpeechSynthesisUtterance(text);
+  const cleanedText = prepareTextForSpeech(text);
+  const utterance = new SpeechSynthesisUtterance(cleanedText);
   utterance.lang = 'en-US';
   utterance.rate = parseFloat(1);
-  
- 
-  
   speechSynthesis.speak(utterance);
 }
 
@@ -276,8 +281,14 @@ generateForm.addEventListener('submit', async e => {
   translationResult.innerHTML = '';
 
   try {
-    const prompt = `Escreva um texto em inglês sobre o tema "${topic}" no estilo "${style}".`;
-    const res = await fetch("http://localhost:11434/api/generate", {
+    const prompt = `
+      Escreva um texto em inglês sobre o tema "${topic}" no estilo "${style}".
+      Não comece com frases como "Sure, here is a text..." ou qualquer outra introdução.
+      Seja direto, objetivo e use no máximo 2 sentenças curtas (até 40 palavras).
+      Não use emojis nem frases adicionais.
+      Apenas o texto solicitado, nada mais.
+      `;    
+      const res = await fetch("http://localhost:11434/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ model: "llama2", prompt, stream: false })
@@ -285,7 +296,7 @@ generateForm.addEventListener('submit', async e => {
 
     const data = await res.json();
     const englishText = (data.response || '').trim();
-    generatedText.textContent = englishText;
+    generatedText.textContent = '';
 
     const translationRes = await fetch('http://localhost:5000/translate', {
       method: 'POST',
