@@ -136,13 +136,8 @@ Fornece uma API REST completa com operações CRUD e persistência de dados.
 - **Volumes**:
   - `./json-server/data:/data`: Armazena os dados persistidos
 - **Endpoints**:
-  - `GET /posts`: Lista todos os posts
-  - `GET /posts/:id`: Obtém um post específico
-  - `POST /posts`: Cria um novo post
-  - `PUT /posts/:id`: Atualiza um post
-  - `DELETE /posts/:id`: Remove um post
-  - `GET /comments`: Lista todos os comentários
-  - `GET /profile`: Obtém o perfil
+  - `GET /words`: Lista todas as palavras marcados como dificeis
+  - `GET /texts`: Lista todas os os textos gerados pela IA
 
 ### LibreTranslate
 
