@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  frontend:
+    image: nginx:alpine
+    container_name: frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - json-server
+      - libretranslate
+      - llama2
+    restart: unless-stopped
+
+  json-server:
+    build: ./json-server
+    container_name: json-server
+    volumes:
+      - ./json-server/data:/data
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: libretranslate
+    ports:
+      - "5000:5000"
+    environment:
+      - LT_LOAD_ONLY=en,pt,es,fr
+      - LT_API_KEYS=false
+    volumes:
+      - libretranslate_models:/app/nllb
+    restart: unless-stopped
+
+  llama2:
+    build: ./llama2
+    container_name: llama2
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+  libretranslate_models:

@@ -1,1 +1,5 @@
 settings.json
+# Ignorar os dados persistentes do json-server
+# mas manter o diretório
+json-server/data/*
+!json-server/data/.gitkeep

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Texto com IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Gerador de Texto com IA</h1>
+
+  <form id="generateForm">
+    <input type="text" id="topic" placeholder="Tema do texto" required />
+    <select id="style">
+      <option value="Conversational">Conversacional</option>
+      <option value="Academic">Acadêmico</option>
+      <option value="Storytelling">Storytelling</option>
+    </select>
+    <button type="submit">Gerar Texto</button>
+  </form>
+
+  <div id="generatedTextContainer">
+    <h3>Texto Gerado</h3>
+    <pre id="generatedText"></pre>
+    <div id="speechControls">
+      <button id="playPauseBtn"><span class="controlIcon">▶️</span></button>
+      <button id="stopBtn"><span class="controlIcon">⏹️</span></button>
+      <div id="progressBar">
+        <div id="progressFill"></div>
+      </div>
+      <div id="timeDisplay">0:00</div>    
+     
+    </div>
+    <div id="translationResult"></div>
+  </div>
+
+  <h3>Textos Salvos</h3>
+  <div id="textsList"></div>
+
+  <h3>Palavras Difíceis</h3>
+  <div id="difficultWordsList"></div>
+
+  <!-- Modal for Word Translation and Examples -->
+  <div id="modal">
+    <div id="modalContentWrapper">
+      <h3>Palavra: <span id="modalWord"></span></h3>
+      <div id="modalContent"></div>
+      <button id="speakWord">Falar Palavra</button>
+      <button id="requestExamples">Gerar Exemplos</button>
+      <button id="markDifficult">Marcar como Difícil</button>
+      <button id="closeModal">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Modal for Difficult Words -->
+  <div id="difficultWordModal">
+    <div id="difficultWordModalContent">
+      <h3>Palavra: <span id="difficultModalWord"></span></h3>
+      <div id="difficultModalContent"></div>
+      <button id="speakDifficultWord">Falar Palavra</button>
+      <button id="closeDifficultModal">Fechar</button>
+    </div>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
